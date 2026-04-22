@@ -4,10 +4,7 @@ import jakarta.validation.Valid;
 import org.example.checklistapp.request.AddAccountRequest;
 import org.example.checklistapp.request.AuthenticateRequest;
 import org.example.checklistapp.request.DeleteAccountRequest;
-import org.example.checklistapp.response.AddAccountResponse;
-import org.example.checklistapp.response.AuthenticateResponse;
-import org.example.checklistapp.response.DeleteAccountResponse;
-import org.example.checklistapp.response.GetAllAccountsResponse;
+import org.example.checklistapp.response.*;
 import org.example.checklistapp.service.AccountService;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,22 +20,22 @@ public class AccountController {
 
 
     @PostMapping("/registration")
-    public AddAccountResponse addAccount(@RequestBody @Valid AddAccountRequest request){
+    public ApiResponse<AddAccountResponse> addAccount(@RequestBody @Valid AddAccountRequest request){
         return this.accountService.addNewAccount(request);
     }
 
     @PostMapping("/authenticate")
-    public AuthenticateResponse authentication(@RequestBody @Valid AuthenticateRequest request){
+    public ApiResponse<AuthenticateResponse> authentication(@RequestBody @Valid AuthenticateRequest request){
         return this.accountService.authenticate(request);
     }
 
     @DeleteMapping("/delete/{id}")
-    public DeleteAccountResponse deleteAccount(@PathVariable Long id){
+    public ApiResponse<DeleteAccountResponse> deleteAccount(@PathVariable Long id){
         return this.accountService.deleteAccount(id);
     }
 
     @GetMapping()
-    public GetAllAccountsResponse getAllAccounts(){ // TODO: paginate this?
+    public ApiResponse<GetAllAccountsResponse> getAllAccounts(){ // TODO: paginate this?
         return this.accountService.getAllAccounts();
     }
 }

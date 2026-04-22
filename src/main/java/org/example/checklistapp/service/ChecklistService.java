@@ -31,7 +31,7 @@ public class ChecklistService {
         this.checklistRepository = checklistRepository;
         this.accountRepository = accountRepository;
     }
-    public AddItemResponse addChecklistItem(AddItemRequest request){
+    public ApiResponse<AddItemResponse> addChecklistItem(AddItemRequest request){
         // Extract fields from request
         String title = request.getTitle();
         Boolean completed = request.isCompleted();
@@ -50,11 +50,12 @@ public class ChecklistService {
             throw new DataIntegrityViolationException("Failed to write to database for id " + item.getId());
         }
         // Prepare response
-        AddItemResponse response = new AddItemResponse(item.getId(), title, completed);
+        AddItemResponse addItemResponse = new AddItemResponse(item.getId(), title, completed);
+        ApiResponse<AddItemResponse> response = new ApiResponse<>(addItemResponse, "Item added successfully.");
         return response;
     }
 
-    public GetAlIItemsResponse getAllChecklistItems(){
+    public ApiResponse<GetAlIItemsResponse> getAllChecklistItems(){
         Account account = getUsernameFromToken();
 
         // Get all checklist items from DB table
@@ -68,22 +69,24 @@ public class ChecklistService {
         }
 
         // Prepare response
-        GetAlIItemsResponse response = new GetAlIItemsResponse(account.getId(), checklistItemResponse);
+        GetAlIItemsResponse getAllItemsResponse = new GetAlIItemsResponse(account.getId(), checklistItemResponse);
+        ApiResponse<GetAlIItemsResponse> response = new ApiResponse<>(getAllItemsResponse, "Items retrieved successfully.");
         return response;
     }
 
-    public ChecklistItems getItemById(@PathVariable Long itemId){
+    public ApiResponse<ChecklistItems> getItemById(@PathVariable Long itemId){
         Account account = getUsernameFromToken();
 
         // Find checklist item of matching itemId belonging to that user in database
         ChecklistItem item = this.getItemForAccount(itemId, account);
 
         // Prepare response
-        ChecklistItems response = new ChecklistItems(item.getId(), item.getTitle(), item.getCompleted());
+        ChecklistItems getCheckListItemResponse = new ChecklistItems(item.getId(), item.getTitle(), item.getCompleted());
+        ApiResponse<ChecklistItems> response = new ApiResponse<>(getCheckListItemResponse, "Item retrieved successfully.");
         return response;
     }
 
-    public DeleteItemResponse deleteChecklistItem(DeleteItemRequest request){
+    public ApiResponse<DeleteItemResponse> deleteChecklistItem(DeleteItemRequest request){
         // Extract id of item to delete
         Long idToDelete = request.getId();
 
@@ -100,11 +103,12 @@ public class ChecklistService {
         }
 
         // Prepare response
-        DeleteItemResponse response = new DeleteItemResponse(idToDelete);
+        DeleteItemResponse deleteItemResponse = new DeleteItemResponse(idToDelete);
+        ApiResponse<DeleteItemResponse> response = new ApiResponse<>(deleteItemResponse, "Item deleted successfully.");
         return response;
     }
 
-    public UpdateItemResponse updateChecklistItem(UpdateItemRequest request){
+    public ApiResponse<UpdateItemResponse> updateChecklistItem(UpdateItemRequest request){
         // extract fields from request
         Long idToUpdate = request.getId();
         String title = request.getTitle();
@@ -126,7 +130,8 @@ public class ChecklistService {
         this.checklistRepository.save(item);
 
         // Prepare response
-        UpdateItemResponse response = new UpdateItemResponse(item.getId(), item.getTitle(), item.getCompleted());
+        UpdateItemResponse updateItemResponse = new UpdateItemResponse(item.getId(), item.getTitle(), item.getCompleted());
+        ApiResponse<UpdateItemResponse> response = new ApiResponse<>(updateItemResponse, "Item updated successfully.");
         return response;
     }
 

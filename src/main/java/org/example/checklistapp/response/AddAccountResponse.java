@@ -1,8 +1,5 @@
 package org.example.checklistapp.response;
 
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.Size;
-
 public class AddAccountResponse {
 
     private Long id;
