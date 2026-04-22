@@ -19,27 +19,27 @@ public class ChecklistController {
     }
 
     @PostMapping
-    public AddItemResponse addChecklistItem(@RequestBody @Valid AddItemRequest request){
+    public ApiResponse<AddItemResponse> addChecklistItem(@RequestBody @Valid AddItemRequest request){
         return this.checklistService.addChecklistItem(request);
     }
 
     @GetMapping("/{id}")
-    public ChecklistItems getChecklistItemById(@PathVariable Long id){
+    public ApiResponse<ChecklistItems> getChecklistItemById(@PathVariable Long id){
         return this.checklistService.getItemById(id);
     }
 
     @GetMapping
-    public GetAlIItemsResponse getAllChecklistItems(){
+    public ApiResponse<GetAlIItemsResponse> getAllChecklistItems(){
         return this.checklistService.getAllChecklistItems();
     }
 
     @DeleteMapping
-    public DeleteItemResponse deleteChecklistItem(@RequestBody @Valid DeleteItemRequest request){
+    public ApiResponse<DeleteItemResponse> deleteChecklistItem(@RequestBody @Valid DeleteItemRequest request){
         return this.checklistService.deleteChecklistItem(request);
     }
 
     @PatchMapping
-    public UpdateItemResponse updateChecklistItem(@RequestBody @Valid UpdateItemRequest request){
+    public ApiResponse<UpdateItemResponse> updateChecklistItem(@RequestBody @Valid UpdateItemRequest request){
         return this.checklistService.updateChecklistItem(request);
     }
 

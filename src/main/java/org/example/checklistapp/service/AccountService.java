@@ -47,7 +47,7 @@ public class AccountService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public AddAccountResponse addNewAccount(AddAccountRequest request){
+    public ApiResponse<AddAccountResponse> addNewAccount(AddAccountRequest request){
         // Extract fields from request
         String username = request.getUsername();
         String password = request.getPassword();
@@ -73,11 +73,12 @@ public class AccountService {
         this.accountRepository.save(newAccount);
 
         // Prepare response
-        AddAccountResponse response = new AddAccountResponse(newAccount.getId(), username, password, accountType);
+        AddAccountResponse addNewAccountResponse = new AddAccountResponse(newAccount.getId(), username, password, accountType);
+        ApiResponse<AddAccountResponse> response = new ApiResponse<>(addNewAccountResponse, "New account successfully created.");
         return response;
     }
 
-    public AuthenticateResponse authenticate(AuthenticateRequest request) {
+    public ApiResponse<AuthenticateResponse> authenticate(AuthenticateRequest request) {
         // Extract fields from request
         String username = request.getUsername();
         String password = request.getPassword();
@@ -96,7 +97,8 @@ public class AccountService {
         String token = jwtUtil.generateToken(username, account.getId(), account.getRole_id().getName());
 
         // Prepare successful response
-        AuthenticateResponse response = new AuthenticateResponse(username, token);
+        AuthenticateResponse authenticateResponse = new AuthenticateResponse(username, token);
+        ApiResponse<AuthenticateResponse> response = new ApiResponse(authenticateResponse, "Authentication successful.");
         return response;
     }
 
@@ -118,7 +120,7 @@ public class AccountService {
         return role.equals("admin");
     }
 
-    public DeleteAccountResponse deleteAccount(Long idToDelete) {
+    public ApiResponse<DeleteAccountResponse> deleteAccount(Long idToDelete) {
         Claims claims = getClaims(); // Extract claims from token
 
         if (claimsIsAdmin(claims)){ // user is admin, can delete any account
@@ -135,13 +137,14 @@ public class AccountService {
         }
 
         // Prepare response and return 200
-        DeleteAccountResponse response = new DeleteAccountResponse();
-        response.setId(idToDelete);
+        DeleteAccountResponse deleteAccountResponse = new DeleteAccountResponse();
+        deleteAccountResponse.setId(idToDelete);
+        ApiResponse<DeleteAccountResponse> response = new ApiResponse(deleteAccountResponse, "Account deletion successful.");
 
         return response;
     }
 
-    public GetAllAccountsResponse getAllAccounts(){
+    public ApiResponse<GetAllAccountsResponse> getAllAccounts(){
         Claims claims = this.getClaims();
 
         if (!this.claimsIsAdmin(claims)){ // if user is not admin, throw FORBIDDEN
@@ -151,7 +154,7 @@ public class AccountService {
         List<Account> allAccounts = this.accountRepository.findAll();
 
         // Prepare response
-        GetAllAccountsResponse response = new GetAllAccountsResponse();
+        GetAllAccountsResponse getAllAccountsResponse = new GetAllAccountsResponse();
         List<GetAccountResponse> getAccountResponses = new ArrayList<>();
         GetAccountResponse accountResponse;
 
@@ -164,7 +167,8 @@ public class AccountService {
             getAccountResponses.add(accountResponse);
         }
 
-        response.setAllAccounts(getAccountResponses);
+        getAllAccountsResponse.setAllAccounts(getAccountResponses);
+        ApiResponse<GetAllAccountsResponse> response = new ApiResponse(getAllAccountsResponse, "Operation successful.");
         return response;
     }
 }

@@ -1,6 +1,6 @@
 package org.example.checklistapp.response;
 
-public class DeleteItemResponse  extends ApiResponse{
+public class DeleteItemResponse {
 
     private Long id;
 

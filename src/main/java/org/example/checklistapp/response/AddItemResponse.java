@@ -1,6 +1,6 @@
 package org.example.checklistapp.response;
 
-public class AddItemResponse extends ApiResponse{
+public class AddItemResponse {
     private Long item_id;
     private String title;
     private Boolean completed;
