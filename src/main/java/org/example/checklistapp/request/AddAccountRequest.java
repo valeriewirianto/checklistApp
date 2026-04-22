@@ -13,6 +13,9 @@ public class AddAccountRequest {
     @Size(max = 20)
     private String password; //TODO: hash this
 
+    @NotBlank(message = "accountType is required")
+    private String accountType;
+
     public String getPassword() {
         return password;
     }
@@ -27,5 +30,13 @@ public class AddAccountRequest {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
     }
 }

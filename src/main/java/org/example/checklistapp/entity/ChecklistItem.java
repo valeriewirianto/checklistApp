@@ -2,6 +2,8 @@ package org.example.checklistapp.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -25,6 +27,7 @@ public class ChecklistItem {
     @ManyToOne(fetch = FetchType.LAZY) // will store foreign key account_id in checklist item table
     // Note the OneToMany isde just JPA mapping in memory for easy access but does not duplicate data in DB
     @JoinColumn(name = "account_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Account account;
 
     public ChecklistItem(){

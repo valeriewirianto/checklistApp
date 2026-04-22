@@ -1,5 +1,6 @@
 package org.example.checklistapp.util;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,12 +26,18 @@ public class JwtFilter extends OncePerRequestFilter {
             String token = header.substring(7);
 
             if (jwtUtil.isValid(token)) {
-                String username = jwtUtil.extractUsername(token);
+                Claims claims = jwtUtil.extractClaims(token);
+
+                String username = claims.getSubject();
+                String role = claims.get("role", String.class);
+                Long userId = claims.get("userId", Long.class);
 
                 // mark user as authenticated
                 var auth = new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
                         username, null, java.util.Collections.emptyList()
                 );
+
+                auth.setDetails(claims);
 
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }

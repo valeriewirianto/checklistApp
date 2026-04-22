@@ -7,14 +7,21 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class JwtUtil {
 
     private final Key key = Keys.hmacShaKeyFor("your-very-secret-key-12345678901234567890".getBytes());
 
-    public String generateToken(String username) {
+    public String generateToken(String username, Long id, String roleName) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", id);
+        claims.put("role", roleName);
+
         return Jwts.builder()
+                .setClaims(claims)
                 .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hour
@@ -22,13 +29,12 @@ public class JwtUtil {
                 .compact();
     }
 
-    public String extractUsername(String token) {
+    public Claims extractClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+                .getBody();
     }
 
     public boolean isValid(String token) {

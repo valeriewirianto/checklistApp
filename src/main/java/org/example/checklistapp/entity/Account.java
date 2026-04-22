@@ -2,6 +2,8 @@ package org.example.checklistapp.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 public class Account {
@@ -16,11 +18,16 @@ public class Account {
     @Column(nullable = false)
     private String password; //TODO: hash this
 
+    @ManyToOne
+    @JoinColumn(name = "role_id", nullable = false)
+    private AccountRole role_id;
+
     public Account(){}
 
-    public Account(String username, String password){
+    public Account(String username, String password, AccountRole role_id){
         this.username = username;
         this.password = password;
+        this.role_id = role_id;
     }
 
     public Long getId() {
@@ -41,5 +48,13 @@ public class Account {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public AccountRole getRole_id() {
+        return role_id;
+    }
+
+    public void setRole_id(AccountRole role_id) {
+        this.role_id = role_id;
     }
 }

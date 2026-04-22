@@ -1,22 +1,18 @@
 package org.example.checklistapp.response;
 
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.Size;
-
-public class AddAccountResponse {
+public class GetAccountResponse {
 
     private Long id;
 
     private String username;
 
-    private String password;
-
     private String accountType;
 
-    public AddAccountResponse(Long id, String username, String password, String accountType){
+    public GetAccountResponse(){}
+
+    public GetAccountResponse(Long id, String username, String accountType){
         this.id = id;
         this.username =username;
-        this.password = password;
         this.accountType = accountType;
     }
 
@@ -28,16 +24,8 @@ public class AddAccountResponse {
         this.id = id;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public String getUsername() {
         return username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public void setUsername(String username) {
